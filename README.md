@@ -1,6 +1,8 @@
 # Picklist
 PickList is a plugin for jQuery
 
+![demo](https://gitee.com/uploads/images/2018/0402/155616_56d2cd77_329660.jpeg "1.jpg")
+
 # Installation
 Include script after the jQuery library:
 ```html
