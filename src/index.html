@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>首页</title>
+    <link href="../css/picklist.css" rel="stylesheet">
+
+
+    <!-- <link href="../css/layout.css" rel="stylesheet"> -->
+</head>
+
+<body>
+    <div style="width:500px;">
+        <div id="list"></div>
+    </div>
+    <button type="button" class="btn btn-info" id="demo">selected</button>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="../js/base.js"></script>
+    <script src="../js/picklist.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var data = [
+                { id: 1, label: 11 },
+                { id: 1, label: 11 },
+                { id: 1, label: 11 },
+                { id: 1, label: 11 },
+                { id: 1, label: 11 },
+                { id: 1, label: 11 },
+                { id: 1, label: 11 },
+                { id: 1, label: 11 }
+            ];
+            var a = $('#list').picklist({
+                data: data,
+                // label:false
+            });
+            $('#demo').on('click', function () {
+                console.log(a.selected());
+            });
+
+        });
+    </script>
+
+</html>
