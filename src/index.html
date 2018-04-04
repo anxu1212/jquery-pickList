@@ -27,103 +27,46 @@
     <script src="../js/picklist.js"></script>
     <script type="text/javascript">
         $(function () {
-            var data = [{
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                }
-            ];
-            var a = $('#list').picklist({
+            var data = {
+                available: [
+                    {id: 1,label: 11},
+                    {id: 2,label: 22},
+                    {id: 3,label: 33},
+                    {id: 4,label: 11},
+                    {id: 5,label: 11},
+                    {id: 6,label: 11},
+                    {id: 7,label: 11},
+                    {id: 8,label: 11},
+                    {id: 9,label: 11},
+                    {id: 10,label: 11},
+
+                ],
+                selected:[
+                    {id:1,label:2},
+                    {id:1,label:2},
+                    {id:1,label:2},
+                    {id:1,label:2},
+                    {id:1,label:2},
+                    {id:1,label:2},
+                    {id:1,label:2},
+                    {id:1,label:2},
+                    {id:1,label:2}
+                ]
+            };
+            var a = $('#list').pickList({
                 data: data,
                 // label:false
             });
             $('#demo').on('click', function () {
-                console.log(a.selected());
+                a.pickList('selected');
+
             });
 
+
+            a.on('add.picklist', function (event, v) {
+                // console.log(v)
+                console.log(v.options);
+            });
         });
     </script>
 
