@@ -32,40 +32,40 @@
                     {id: 1,label: 11},
                     {id: 2,label: 22},
                     {id: 3,label: 33},
-                    {id: 4,label: 11},
-                    {id: 5,label: 11},
-                    {id: 6,label: 11},
-                    {id: 7,label: 11},
-                    {id: 8,label: 11},
-                    {id: 9,label: 11},
-                    {id: 10,label: 11},
-
+                    {id: 4,label: 44},
+                    {id: 5,label: 55},
+                    {id: 6,label: 66},
+                    {id: 7,label: 77},
+                    {id: 8,label: 88},
+                    {id: 9,label: 99},
+                    {id: 10,label: 01},
                 ],
                 selected:[
-                    {id:1,label:2},
-                    {id:1,label:2},
-                    {id:1,label:2},
-                    {id:1,label:2},
-                    {id:1,label:2},
-                    {id:1,label:2},
-                    {id:1,label:2},
-                    {id:1,label:2},
-                    {id:1,label:2}
+                    {id: 11,label: 12},
+                    {id: 12,label: 13},
+                    {id: 13,label: 14},
                 ]
             };
             var a = $('#list').pickList({
                 data: data,
-                // label:false
+                // buttons:[
+                //     {
+                //         action: 'remove',
+                //         label: 'Remove',
+                //         className: 'btn btn-sm btn-block btn-info'
+                //     }
+                // ]
             });
             $('#demo').on('click', function () {
-                a.pickList('selected');
-
+                console.log(a.pickList('getSelected'));
+            });
+            
+            a.on('picklist.remove', function (event, v) {
+                console.log(v)
             });
 
-
-            a.on('add.picklist', function (event, v) {
-                // console.log(v)
-                console.log(v.options);
+            a.on('picklist.add', function (event, v) {
+                console.log(v)
             });
         });
     </script>
