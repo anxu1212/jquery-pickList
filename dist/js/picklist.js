@@ -1,133 +1,216 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 /**
  * @author anxu <anxu1212@hotmail.com>
  * version: 0.1.0
  */
 (function ($, window) {
     'use strict';
+    /**
+     * 获取select 中选择的数据
+     * @param {Select DOM} ele 
+     */
 
-    var picklist = function picklist(ele, opt) {
-        this.$element = ele;
-        this.defaults = {
-            data: [],
-            buttons: [{
-                action: 'add'
-            }, {
-                action: 'addAll',
-                label: 'addAll'
-            }, {
-                action: 'remove',
-                label: 'Remove',
-                className: 'btn btn-sm btn-block btn-info'
-            }, {
-                action: 'removeAll'
-            }],
-            buttonClass: 'btn btn-sm btn-block btn-primary',
-            label: {
-                content: ['Optional:', 'Selected:']
-            },
-            select: {
-                size: 15
-            }
-        };
-        this.options = $.extend({}, this.defaults, opt);
+    var getSelect = function getSelect(ele) {
+        var selected = [];
+        ele.find('option:selected').each(function () {
+            selected.push($(this).data('item'));
+        });
+        return selected;
+    };
+
+    var PickList = function PickList(ele, opt) {
+
+        this.$element = $(ele);
+        this.options = opt;
+        this.available = opt.data.available ? opt.data.available : [];
+        this.selected = opt.data.selected ? opt.data.selected : [];
 
         this.init();
         return this;
     };
 
     /**
-     * init
+     * 
      */
-    picklist.prototype.init = function () {
+    PickList.DEFAULTS = {
+        data: {
+            available: [],
+            selected: []
+        },
+        buttons: [{ action: 'add' }, { action: 'addAll' }, { action: 'remove', label: 'Remove', className: 'btn btn-sm btn-block btn-info' }, { action: 'removeAll' }],
+        buttonClass: 'btn btn-sm btn-block btn-primary',
+        label: {
+            content: ['Available:', 'Selected:']
+        },
+        select: {
+            size: 15
+        }
+
+        /**
+         * init
+         */
+    };PickList.prototype.init = function () {
         this.initHtml();
-        this.initActions();
         this.initData();
-    };
-    picklist.prototype.initData = function () {
-        var data = this.options.data;
-        var options = '';
-        $.each(data, function (i, v) {
-            options += '<option value="' + v.id + '">' + v.label + '</option>' + "\n";
-        });
-        this.$element.find('.select.optional select').append(options);
-    };
-    picklist.prototype.initActions = function () {
-        var picklist = this.$element;
-
-        this.$element.find(".button-group .add").on('click', function () {
-            console.log('add');
-            var p = picklist.find(".select.optional option:selected");
-            p.clone().appendTo(picklist.find(".select.selected select"));
-            p.remove();
-        });
-
-        this.$element.find(".button-group .remove").on('click', function () {
-            var p = picklist.find(".select.selected option:selected");
-            p.clone().appendTo(picklist.find(".select.optional select"));
-            p.remove();
-        });
-
-        this.$element.find(".button-group .addAll").on('click', function () {
-            var p = picklist.find(".select.optional option");
-            p.clone().appendTo(picklist.find(".select.selected select"));
-            p.remove();
-        });
-
-        this.$element.find(".button-group .removeAll").on('click', function () {
-            var p = picklist.find(".select.selected option");
-            p.clone().appendTo(picklist.find(".select.optional select"));
-            p.remove();
-        });
-    };
-    picklist.prototype.initButtons = function () {
-        var container = $('<div></div>').addClass('button-group'),
-            that = this;
-        $.each(this.options.buttons, function (index, value) {
-            var button = $('<button type="button"></button>');
-            button.addClass(typeof value.className == 'undefined' ? that.options.buttonClass : value.className);
-            button.addClass(value.action);
-            button.append(typeof value.label == 'undefined' ? value.action : value.label);
-            container.append(button);
-        });
-        return container;
+        this.initActions();
     };
 
-    picklist.prototype.initSelect = function () {
-        var container = $('<div></div>').addClass('select');
-
-        var select = $('<select multiple></select>').attr('size', typeof this.options.select.size != 'undefined' ? this.options.select.size : 15);
-        container.append(select);
-        return container;
-    };
-    picklist.prototype.initHtml = function () {
+    PickList.prototype.initHtml = function () {
         var buttonGroup = this.initButtons();
-        var optional = this.initSelect();
+        var available = this.initSelect();
         var selected = this.initSelect();
 
         if (this.options.label !== false) {
-            optional.prepend($('<p></p>').text(this.options.label.content[0]));
-            selected.prepend($('<p></p>').text(this.options.label.content[1]));
+            available.prepend($('<p>').text(this.options.label.content[0]));
+            selected.prepend($('<p>').text(this.options.label.content[1]));
         }
         this.$element.addClass('picklist');
-        this.$element.append(optional.addClass('optional'));
+        this.$element.append(available.addClass('available'));
         this.$element.append(buttonGroup);
         this.$element.append(selected.addClass('selected'));
     };
-    picklist.prototype.selected = function () {
+
+    PickList.prototype.initButtons = function () {
+        var buttonGroup = $('<div>').addClass('button-group'),
+            that = this;
+        $.each(this.options.buttons, function (i, v) {
+            var button = $('<button>').attr('type', 'button');
+            button.addClass(typeof v.className == 'undefined' ? that.options.buttonClass : v.className);
+            button.addClass(v.action);
+            button.append(typeof v.label == 'undefined' ? v.action : v.label);
+            button.appendTo(buttonGroup);
+        });
+        return buttonGroup;
+    };
+
+    PickList.prototype.initSelect = function () {
+        var container = $('<div>').addClass('select');
+
+        $('<select>').prop('multiple', true).attr('size', this.options.select.size).appendTo(container);
+        return container;
+    };
+
+    PickList.prototype.initData = function () {
+        var selected = this.$element.find('.select.selected select');
+        var available = this.$element.find('.select.available select');
+        selected.empty();
+        available.empty();
+
+        $.each(this.available, function (i, v) {
+            $('<option>').val(v.id).text(v.label).data('item', v).appendTo(available);
+        });
+
+        $.each(this.selected, function (i, v) {
+            $('<option>').val(v.id).text(v.label).data('item', v).appendTo(selected);
+        });
+    };
+
+    PickList.prototype.initActions = function () {
+        var el = this.$element;
+        var that = this;
+
+        this.$element.find(".button-group .add").on('click', function () {
+            var selectValue = getSelect(el.find(".select.available select"));
+
+            $.merge(that.selected, selectValue);
+
+            that.available = that.available.filter(function (v) {
+                for (var i = 0, len = selectValue.length; i < len; i++) {
+                    if (selectValue[i].id != v.id) {
+                        continue;
+                    }
+                    return false;
+                }
+                return true;
+            });
+
+            that.reload();
+            that.trigger('add', selectValue);
+        });
+
+        this.$element.find(".button-group .remove").on('click', function () {
+            var selectValue = getSelect(el.find(".select.selected select"));
+
+            $.merge(that.available, selectValue);
+
+            that.selected = that.selected.filter(function (v) {
+                for (var i = 0, len = selectValue.length; i < len; i++) {
+                    if (selectValue[i].id != v.id) {
+                        continue;
+                    }
+                    return false;
+                }
+                return true;
+            });
+            that.reload();
+            that.trigger('remove', selectValue);
+        });
+
+        this.$element.find(".button-group .addAll").on('click', function () {
+            var selectValue = that.available;
+            $.merge(that.selected, selectValue);
+            that.available = [];
+            that.reload();
+            that.trigger('add', selectValue);
+        });
+
+        this.$element.find(".button-group .removeAll").on('click', function () {
+            var selectValue = that.selected;
+            $.merge(that.available, selectValue);
+            that.selected = [];
+            that.reload();
+            that.trigger('remove', selectValue);
+        });
+    };
+
+    PickList.prototype.reload = function () {
+        this.initData();
+    };
+    /**
+     * 触发事件
+     * @param {string} name 
+     */
+    PickList.prototype.trigger = function (name) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        name = 'picklist.' + name;
+
+        this.$element.trigger($.Event(name), args);
+    };
+
+    PickList.prototype.getSelected = function () {
         var objResult = [];
         this.$element.find(".select.selected select option").each(function () {
-            objResult.push({
-                id: $(this).val(),
-                text: this.text
-            });
+            objResult.push($(this).data('item'));
         });
         return objResult;
     };
 
+    var allowedMethods = ['getSelected'];
     // Plugin definition.
-    $.fn.picklist = function (options) {
-        return new picklist(this, options);
+    $.fn.pickList = function (option) {
+        var value,
+            args = Array.prototype.slice.call(arguments, 1);
+
+        this.each(function () {
+            var $this = $(this),
+                obj = $this.data('picklist');
+
+            if (obj && typeof option === 'string') {
+                if ($.inArray(option, allowedMethods) < 0) {
+                    throw new Error("Unknown method: " + option);
+                }
+                value = obj[option].apply(obj, args);
+            }
+
+            if ((typeof option === 'undefined' ? 'undefined' : _typeof(option)) === 'object') {
+                var options = $.extend({}, PickList.DEFAULTS, option);
+                $this.data('picklist', new PickList(this, options));
+            }
+        });
+
+        return typeof value === 'undefined' ? this : value;
     };
 })(jQuery, window);

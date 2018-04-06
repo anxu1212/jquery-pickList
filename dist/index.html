@@ -19,7 +19,7 @@
     <div style="width:500px;margin:40px auto;">
         <div id="list"></div>
         <div class="buttons">
-            <button type="button" class="btn btn-sm btn-block btn-info" id="demo">selected</button>
+            <button type="button" class="btn btn-sm btn-block btn-info" id="button">selected</button>
         </div>
     </div>
 
@@ -27,103 +27,47 @@
     <script src="../js/picklist.js"></script>
     <script type="text/javascript">
         $(function () {
-            var data = [{
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                },
-                {
-                    id: 1,
-                    label: 11
-                }
-            ];
-            var a = $('#list').picklist({
+            var data = {
+                available: [
+                    {id: 1,label: 11},
+                    {id: 2,label: 22},
+                    {id: 3,label: 33},
+                    {id: 4,label: 44},
+                    {id: 5,label: 55},
+                    {id: 6,label: 66},
+                    {id: 7,label: 77},
+                    {id: 8,label: 88},
+                    {id: 9,label: 99},
+                    {id: 10,label: 01},
+                ],
+                selected:[
+                    {id: 11,label: 12},
+                    {id: 12,label: 13},
+                    {id: 13,label: 14},
+                ]
+            };
+            var a = $('#list').pickList({
                 data: data,
-                // label:false
-            });
-            $('#demo').on('click', function () {
-                console.log(a.selected());
+                // buttons:[
+                //     {
+                //         action: 'remove',
+                //         label: 'Remove',
+                //         className: 'btn btn-sm btn-block btn-info'
+                //     }
+                // ]
             });
 
+            $('#button').on('click', function () {
+                console.log(a.pickList('getSelected'));
+            });
+            
+            a.on('picklist.remove', function (event, v) {
+                console.log(v)
+            });
+
+            a.on('picklist.add', function (event, v) {
+                console.log(v)
+            });
         });
     </script>
 
