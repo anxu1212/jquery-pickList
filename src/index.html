@@ -19,7 +19,7 @@
     <div style="width:500px;margin:40px auto;">
         <div id="list"></div>
         <div class="buttons">
-            <button type="button" class="btn btn-sm btn-block btn-info" id="demo">selected</button>
+            <button type="button" class="btn btn-sm btn-block btn-info" id="button">selected</button>
         </div>
     </div>
 
@@ -56,7 +56,8 @@
                 //     }
                 // ]
             });
-            $('#demo').on('click', function () {
+
+            $('#button').on('click', function () {
                 console.log(a.pickList('getSelected'));
             });
             
